@@ -16,9 +16,9 @@ def norm(A, B):
 
     s = np.linalg.norm(A+B)
 
-    print('A:',A)
-    print('B:',B)
-    print('s:',s)
+    #print('A:',A)
+    #print('B:',B)
+    #print('s:',s)
     
     return s
 
