@@ -296,7 +296,7 @@ def pegasos(feature_matrix, labels, T, L):
             counter += 1
             eta = 1/np.sqrt(counter)
             theta, theta_0 = pegasos_single_step_update(feature_matrix[i], labels[i],L,eta,theta,theta_0)
-            print('t',t+1,'i',i+1,'eta',eta,'lambda',L,'theta',theta,'theta_0',theta_0)
+            #print('t',t+1,'i',i+1,'eta',eta,'lambda',L,'theta',theta,'theta_0',theta_0)
 
     return theta, theta_0
 
