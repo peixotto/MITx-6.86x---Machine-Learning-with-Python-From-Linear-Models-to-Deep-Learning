@@ -34,7 +34,11 @@ def hinge_loss_single(feature_vector, label, theta, theta_0):
     given data point and parameters.
     """
     # Your code here
-    raise NotImplementedError
+    #raise NotImplementedError
+
+    z = label * (np.dot(feature_vector,theta) + theta_0)
+    return max(0, 1 - z)
+
 
 
 def hinge_loss_full(feature_matrix, labels, theta, theta_0):
@@ -56,7 +60,18 @@ def hinge_loss_full(feature_matrix, labels, theta, theta_0):
     loss across all of the points in the feature matrix.
     """
     # Your code here
-    raise NotImplementedError
+    #raise NotImplementedError
+    loss = 0
+    for i in range(len(feature_matrix)):
+        #z = labels[i] * (np.dot(feature_matrix[i],theta) + theta_0)
+        #loss += max(0, 1 - z)
+        loss += hinge_loss_single(feature_matrix[i],labels[i],theta,theta_0)
+    
+    loss = loss / len(feature_matrix)
+    #print(loss)
+    return loss
+
+    
 
 
 def perceptron_single_step_update(
@@ -82,7 +97,19 @@ def perceptron_single_step_update(
     completed.
     """
     # Your code here
-    raise NotImplementedError
+    #raise NotImplementedError
+    #loss = hinge_loss_single(feature_vector, label, current_theta, current_theta_0)
+    #loss = max(0, 1 - label * (np.dot(feature_vector,current_theta) + current_theta_0))
+    #print(loss)
+
+    
+    if label * (np.dot(current_theta,feature_vector) + current_theta_0) <= 0:
+        current_theta += label*feature_vector
+        current_theta_0 += label
+    
+    return current_theta, current_theta_0
+
+
 
 
 def perceptron(feature_matrix, labels, T):
@@ -111,11 +138,18 @@ def perceptron(feature_matrix, labels, T):
     the feature matrix.
     """
     # Your code here
+    s,f = feature_matrix.shape
+    theta = np.zeros(f)
+    theta_0 = 0
+
     for t in range(T):
         for i in get_order(feature_matrix.shape[0]):
             # Your code here
-            pass
-    raise NotImplementedError
+            #pass
+            theta, theta_0 = perceptron_single_step_update(feature_matrix[i],labels[i],theta,theta_0)
+            
+    #raise NotImplementedError
+    return theta, theta_0
 
 
 def average_perceptron(feature_matrix, labels, T):
@@ -148,7 +182,32 @@ def average_perceptron(feature_matrix, labels, T):
     find a sum and divide.
     """
     # Your code here
-    raise NotImplementedError
+    #raise NotImplementedError
+    Nlines,Ncolumns = feature_matrix.shape
+    #print('Nlines',Nlines)
+    #print('Ncolumns',Ncolumns)
+
+    theta = np.zeros(Ncolumns)
+    sum_theta = np.zeros(Ncolumns)
+    theta_0 = 0
+    sum_theta_0 = 0 
+
+    for t in range(T):
+        for i in get_order(feature_matrix.shape[0]):
+            # Your code here
+            #pass
+            #print(i,T)
+            theta, theta_0 = perceptron_single_step_update(feature_matrix[i],labels[i],theta,theta_0)
+            #print('theta',theta)
+            #print('sum_theta',sum_theta)
+            sum_theta = np.add(sum_theta,theta)
+            sum_theta_0 += theta_0
+    
+    
+    avg_theta = np.true_divide(sum_theta,(Nlines*T))
+    avg_theta_0 = sum_theta_0/(Nlines*T)
+
+    return avg_theta, avg_theta_0
 
 
 def pegasos_single_step_update(
@@ -178,7 +237,23 @@ def pegasos_single_step_update(
     completed.
     """
     # Your code here
-    raise NotImplementedError
+    #raise NotImplementedError
+    """
+    feature_vector = np.array([1, 2])
+    label, theta, theta_0 = 1, np.array([-1, 1]), -1.5
+    L = 0.2
+    eta = 0.1
+    exp_res = (np.array([-0.88, 1.18]), -1.4)
+    """
+    if label * np.dot(current_theta,feature_vector) + current_theta_0 <= 1:
+        current_theta = (1 - eta*L)*current_theta + eta*label*feature_vector
+        current_theta_0 = current_theta_0 + eta*label
+    else:
+        current_theta = (1 - eta*L)*current_theta
+        #current_theta_0 = current_theta_0
+        
+    
+    return current_theta, current_theta_0
 
 
 def pegasos(feature_matrix, labels, T, L):
@@ -211,7 +286,19 @@ def pegasos(feature_matrix, labels, T, L):
     parameter, found after T iterations through the feature matrix.
     """
     # Your code here
-    raise NotImplementedError
+    Nlines,Ncolumns = feature_matrix.shape
+    theta = np.zeros(Ncolumns)
+    theta_0 = 0
+    counter = 0
+
+    for t in range(T):
+        for i in (get_order(feature_matrix.shape[0])):
+            counter += 1
+            eta = 1/np.sqrt(counter)
+            theta, theta_0 = pegasos_single_step_update(feature_matrix[i], labels[i],L,eta,theta,theta_0)
+            print('t',t+1,'i',i+1,'eta',eta,'lambda',L,'theta',theta,'theta_0',theta_0)
+
+    return theta, theta_0
 
 # Part II
 
