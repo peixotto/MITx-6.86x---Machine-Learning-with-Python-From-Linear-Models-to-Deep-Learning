@@ -244,11 +244,11 @@ def pegasos_single_step_update(
     completed.
     """
     # Your code here
-    if label * np.dot(current_theta,feature_vector) + current_theta_0 <= 1:
-        current_theta = (1 - eta*L)*current_theta + eta*label*feature_vector
-        current_theta_0 = current_theta_0 + eta*label
+    if label * (np.dot(current_theta,feature_vector) + current_theta_0) <= 1:
+        current_theta = ((1 - (eta * L)) * current_theta) + (eta * label * feature_vector)
+        current_theta_0 = (current_theta_0 + (eta * label))
     else:
-        current_theta = (1 - eta*L)*current_theta
+        current_theta = (1 - (eta * L)) * current_theta
         #current_theta_0 = current_theta_0
         
     
@@ -324,7 +324,27 @@ def classify(feature_matrix, theta, theta_0):
     be considered a positive classification.
     """
     # Your code here
-    raise NotImplementedError
+    # raise NotImplementedError
+    nSamples, nFeatures = feature_matrix.shape
+    prediction = np.array([])
+
+    # print('nSamples', nSamples)
+    # print('init prediction', prediction)
+
+    for i in range(feature_matrix.shape[0]):
+        if np.dot(theta, feature_matrix[i]) + theta_0 > 0:
+            # print('if-before prediction', prediction)
+            prediction = np.append(prediction,[1])
+            # print('if-after prediction', prediction)
+        else:
+            # print('else-before prediction', prediction)
+            prediction = np.append(prediction,[-1])
+            # print('else-after prediction', prediction)
+
+    # print('end prediction', prediction)
+    return prediction
+
+
 
 
 def classifier_accuracy(
@@ -360,7 +380,31 @@ def classifier_accuracy(
     accuracy of the trained classifier on the validation data.
     """
     # Your code here
-    raise NotImplementedError
+    # raise NotImplementedError
+    
+    # 1 - Determine the clasification equation by calculating theta and theta_0
+    theta, theta_0 = classifier(train_feature_matrix,train_labels,**kwargs)
+    # print('theta, theta_0:',theta, theta_0)
+
+    # 2 - Classify data
+    train_preds_labels = classify(train_feature_matrix, theta, theta_0)
+    val_preds_labels = classify(val_feature_matrix, theta, theta_0)
+    # print('train_preds_labels:',train_preds_labels, train_preds_labels.shape)
+    # print('train_labels:',train_labels, train_labels.shape)
+    
+    # print('val_preds_labels:',val_preds_labels, val_preds_labels.shape)
+    # print('val_labels:',val_labels, val_labels.shape)
+    
+    # 3 - Compare pred labels versus train labels accuracy
+    train_accuracy = accuracy(train_preds_labels,train_labels)
+    validation_accuracy = accuracy(val_preds_labels,val_labels)
+
+    acc_tuple = (train_accuracy,validation_accuracy)
+    # print('acc_tuple:',acc_tuple)
+
+    return acc_tuple
+
+
 
 
 def extract_words(input_string):
