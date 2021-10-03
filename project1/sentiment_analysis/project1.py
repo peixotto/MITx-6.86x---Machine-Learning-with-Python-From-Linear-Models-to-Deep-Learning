@@ -141,14 +141,17 @@ def perceptron(feature_matrix, labels, T):
     s,f = feature_matrix.shape
     theta = np.zeros(f)
     theta_0 = 0
-
+    
     for t in range(T):
         for i in get_order(feature_matrix.shape[0]):
             # Your code here
             #pass
             theta, theta_0 = perceptron_single_step_update(feature_matrix[i],labels[i],theta,theta_0)
             
-    #raise NotImplementedError
+    # print('Perceptron T:', T)
+    # print('Perceptron theta:', theta)
+    # print('Perceptron theta_0:', theta_0)
+
     return theta, theta_0
 
 
@@ -207,6 +210,10 @@ def average_perceptron(feature_matrix, labels, T):
     avg_theta = np.true_divide(sum_theta,(Nlines*T))
     avg_theta_0 = sum_theta_0/(Nlines*T)
 
+    # print('Avg Perceptron T:', T)
+    # print('Avg Perceptron avg_theta:', avg_theta)
+    # print('Avg Perceptron avg_theta_0:', avg_theta_0)
+
     return avg_theta, avg_theta_0
 
 
@@ -237,14 +244,6 @@ def pegasos_single_step_update(
     completed.
     """
     # Your code here
-    #raise NotImplementedError
-    """
-    feature_vector = np.array([1, 2])
-    label, theta, theta_0 = 1, np.array([-1, 1]), -1.5
-    L = 0.2
-    eta = 0.1
-    exp_res = (np.array([-0.88, 1.18]), -1.4)
-    """
     if label * np.dot(current_theta,feature_vector) + current_theta_0 <= 1:
         current_theta = (1 - eta*L)*current_theta + eta*label*feature_vector
         current_theta_0 = current_theta_0 + eta*label
@@ -297,6 +296,10 @@ def pegasos(feature_matrix, labels, T, L):
             eta = 1/np.sqrt(counter)
             theta, theta_0 = pegasos_single_step_update(feature_matrix[i], labels[i],L,eta,theta,theta_0)
             #print('t',t+1,'i',i+1,'eta',eta,'lambda',L,'theta',theta,'theta_0',theta_0)
+
+    # print('Pegasos T:', T)
+    # print('Pegasos theta:', theta)
+    # print('Pegasos theta_0:', theta_0)
 
     return theta, theta_0
 
