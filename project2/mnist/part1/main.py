@@ -25,7 +25,7 @@ plot_images(train_x[0:20, :])
 # TODO: first fill out functions in linear_regression.py, otherwise the functions below will not work
 
 
-def run_linear_regression_on_MNIST(lambda_factor=1):
+def run_linear_regression_on_MNIST(lambda_factor=0.01):
     """
     Trains linear regression, classifies test data, computes test error on test set
 
