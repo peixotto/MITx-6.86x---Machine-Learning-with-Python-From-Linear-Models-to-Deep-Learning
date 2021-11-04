@@ -7,8 +7,13 @@ import torch
 import torch.autograd as autograd
 import torch.nn.functional as F
 import torch.nn as nn
+#import os, inspect
+#currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+#parentdir = os.path.dirname(currentdir)
 import sys
 sys.path.append("..")
+#sys.path.append("../Datasets/*")
+#sys.path.insert(0,parentdir)
 import utils
 from utils import *
 from train_utils import batchify_data, run_epoch, train_model
@@ -31,7 +36,7 @@ def main():
     y_train = [y_train[i] for i in permutation]
 
     # Split dataset into batches
-    batch_size = 32
+    batch_size = 64
     train_batches = batchify_data(X_train, y_train, batch_size)
     dev_batches = batchify_data(X_dev, y_dev, batch_size)
     test_batches = batchify_data(X_test, y_test, batch_size)
