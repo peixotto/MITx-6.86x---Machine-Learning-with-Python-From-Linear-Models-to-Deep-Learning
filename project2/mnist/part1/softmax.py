@@ -32,7 +32,26 @@ def compute_probabilities(X, theta, temp_parameter):
         H - (k, n) NumPy array, where each entry H[j][i] is the probability that X[i] is labeled as j
     """
     #YOUR CODE HERE
-    raise NotImplementedError
+    # raise NotImplementedError
+    n, d = X.shape # n = datapoints / d = features
+    k = theta.shape[0]
+    print('X=',X)
+    print(f'X (n={n}, d={d})') # (3,5)
+    print(f'theta (k={k}, d={d})') # (7, 5)
+    print('np.transpose(X).shape:',np.transpose(X).shape) # (5,3) -- Posso multiplicar por theta e resulta numa matrix (7,3)
+    
+    H = np.array([k])
+    sum_exp_item = 0
+    for j in range(k):
+        exp_item = np.exp(np.dot(theta[j],np.transpose(X))/temp_parameter)
+        sum_exp_item += exp_item
+        print(exp_item)
+    
+    print('sum_exp_item:',sum_exp_item)
+
+
+    
+    
 
 def compute_cost_function(X, Y, theta, lambda_factor, temp_parameter):
     """
